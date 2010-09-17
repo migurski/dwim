@@ -1,3 +1,5 @@
+class EpistemicClosure(Exception): pass
+
 def time2str(s, tz=None):
     """
     """
@@ -14,6 +16,6 @@ def str2time(s):
     try:
         dt = parse(s)
     except ValueError:
-        raise Exception(s)
+        raise EpistemicClosure('I don\'t what what you mean by "%s"' % s)
 
     return int(mktime(dt.timetuple()))
