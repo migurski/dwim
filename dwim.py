@@ -1,11 +1,20 @@
 class EpistemicClosure(Exception): pass
 
-def time2str(s, tz=None):
+def time2str(s, fancy=False, tz=None):
     """
     """
     from datetime import datetime
+    from time import strftime
 
-    return datetime.fromtimestamp(s, tz)
+    time = datetime.fromtimestamp(s, tz)
+    
+    if fancy:
+        zone = str(time)[-6:]
+        full = strftime('%a, %d %b %Y %H:%M:%S ', time.timetuple())
+        
+        return full + zone
+    else:
+        return str(time)
 
 def str2time(s):
     """

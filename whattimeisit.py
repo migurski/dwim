@@ -9,5 +9,7 @@ for arg in argv[1:]:
         
         print >> stderr, 'time: ', t
 
-    print >> stderr, 'local:', time2str(int(arg), tzlocal())
-    print >> stderr, 'utc:  ', time2str(int(arg), tzutc())
+    print >> stderr, 'local:', time2str(int(arg), False, tzlocal())
+    print >> stderr, '      ', time2str(int(arg), True, tzlocal())
+    print >> stderr, 'utc:  ', time2str(int(arg), False, tzutc())
+    print >> stderr, '      ', time2str(int(arg), True, tzutc())
