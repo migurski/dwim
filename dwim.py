@@ -20,11 +20,22 @@ def str2time(s):
     """
     """
     from dateutil.parser import parse
-    from time import mktime
     
     try:
         dt = parse(s)
     except ValueError:
         raise EpistemicClosure('I don\'t what what you mean by "%s"' % s)
 
-    return int(mktime(dt.timetuple()))
+    if dt.utcoffset() is None:
+        from time import mktime as tuple2epoch
+
+        # no timezone was specified in the input, so we will assume local time.
+
+    else:
+        from calendar import timegm as tuple2epoch
+
+        # here, dt has a populated UTC offset.
+        # we subtract it from dt so we can return a value in UTC.
+        dt -= dt.utcoffset()
+
+    return int(tuple2epoch(dt.timetuple()))
