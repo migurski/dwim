@@ -39,3 +39,39 @@ def str2time(s):
         dt -= dt.utcoffset()
 
     return int(tuple2epoch(dt.timetuple()))
+
+def oauthdance(consumer_key, consumer_secret, request_token_url='http://twitter.com/oauth/request_token', authorize_url='http://twitter.com/oauth/authorize', access_token_url='http://twitter.com/oauth/access_token'):
+    """
+    """
+    from oauth2 import Consumer, Client, Token
+    from urlparse import parse_qsl
+
+    con = Consumer(consumer_key, consumer_secret)
+    cli = Client(con)
+
+    res, bod = cli.request(request_token_url, 'GET')
+    
+    assert res['status'] == '200', 'Expected status=200, got %s.' % res['status']
+    
+    tok = dict(parse_qsl(bod))
+    tok = Token(tok['oauth_token'], tok['oauth_token_secret'])
+    
+    print 'Visit this URL to get a PIN:'
+    print '    %s?oauth_token=%s' % (authorize_url, tok.key)
+    
+    pin = raw_input('PIN: ').strip()
+    
+    tok.set_verifier(pin)
+    cli = Client(con, tok)
+    
+    res, bod = cli.request(access_token_url, 'GET')
+    
+    assert res['status'] == '200', 'Expected status=200, got %s.' % res['status']
+    
+    tok = dict(parse_qsl(bod))
+    tok = Token(tok['oauth_token'], tok['oauth_token_secret'])
+    
+    print 'Your token key is: ', tok.key
+    print 'And your secret is:', tok.secret
+    
+    return tok
