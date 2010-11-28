@@ -24,7 +24,7 @@ def str2time(s):
     try:
         dt = parse(s)
     except ValueError:
-        raise EpistemicClosure('I don\'t what what you mean by "%s"' % s)
+        raise EpistemicClosure('I don\'t know what you mean by "%s"' % s)
 
     if dt.utcoffset() is None:
         from time import mktime as tuple2epoch
